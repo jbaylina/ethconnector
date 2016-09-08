@@ -1,6 +1,6 @@
 {
   "name": "ethconnector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Helper library to test solidity smart contracts.",
   "main": "eth_connector.js",
   "scripts": {
@@ -23,5 +23,12 @@
   "bugs": {
     "url": "https://github.com/jbaylina/ethconnector/issues"
   },
-  "homepage": "https://github.com/jbaylina/ethconnector"
+  "homepage": "https://github.com/jbaylina/ethconnector",
+  "dependencies": {
+    "async": "^2.0.1",
+    "ethereumjs-testrpc": "^2.2.4",
+    "lodash": "^4.15.0",
+    "solc": "^0.3.6",
+    "web3": "^0.17.0-alpha"
+  }
 }
