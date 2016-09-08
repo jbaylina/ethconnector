@@ -1,2 +1,2 @@
 # ethconnector
-Ethereum helper function
+Helper library to test solidity smart contracts.

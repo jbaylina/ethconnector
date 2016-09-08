@@ -1,0 +1,27 @@
+{
+  "name": "ethconnector",
+  "version": "0.0.1",
+  "description": "Helper library to test solidity smart contracts.",
+  "main": "eth_connector.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbaylina/ethconnector.git"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity",
+    "test",
+    "helper",
+    "smart",
+    "contracts"
+  ],
+  "author": "Jordi Baylina",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jbaylina/ethconnector/issues"
+  },
+  "homepage": "https://github.com/jbaylina/ethconnector"
+}
