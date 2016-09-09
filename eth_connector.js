@@ -19,7 +19,11 @@ function EthClient() {
 }
 
 
-EthClient.prototype.init = function init(provider, cb) {
+EthClient.prototype.init = function init(provider, opts, cb) {
+    if (typeof opts === "function") {
+        cb =opts;
+        opts = {};
+    }
     var self = this;
     if (provider.toUpperCase() === "TESTRPC") {
         self.web3.setProvider(TestRPC.provider());
