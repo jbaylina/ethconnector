@@ -26,7 +26,7 @@ EthClient.prototype.init = function init(provider, opts, cb) {
     }
     var self = this;
     if (provider.toUpperCase() === "TESTRPC") {
-        self.web3.setProvider(TestRPC.provider());
+        self.web3.setProvider(TestRPC.provider(opts));
     }
     self.web3.eth.getAccounts(function(err, accounts) {
         if (err) return cb(err);
