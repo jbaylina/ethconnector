@@ -1,6 +1,6 @@
 {
   "name": "ethconnector",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Helper library to test solidity smart contracts.",
   "main": "eth_connector.js",
   "scripts": {

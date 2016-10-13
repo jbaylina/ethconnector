@@ -27,7 +27,10 @@ EthClient.prototype.init = function init(provider, opts, cb) {
     var self = this;
     if (provider.toUpperCase() === "TESTRPC") {
         self.web3.setProvider(TestRPC.provider(opts));
+    } else {
+        self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
+
     self.web3.eth.getAccounts(function(err, accounts) {
         if (err) return cb(err);
         self.accounts = accounts;
@@ -37,7 +40,7 @@ EthClient.prototype.init = function init(provider, opts, cb) {
 
 
 
-EthClient.prototype.loadSol = function loadSol(filename, imported, cb) {
+EthClient.prototype.loadSol = function loadSol(file, imported, cb) {
 
     if (typeof imported === "function") {
         cb = imported;
@@ -46,7 +49,7 @@ EthClient.prototype.loadSol = function loadSol(filename, imported, cb) {
 
     var src = "";
 
-    var file = path.resolve(path.join(__dirname, ".."), filename);
+//    var file = path.resolve(path.join(__dirname, ".."), filename);
     if (imported[file]) {
         return cb(null, src);
     }
@@ -67,6 +70,8 @@ EthClient.prototype.loadSol = function loadSol(filename, imported, cb) {
             var r = /import \"(.*)\";/;
             var importfile = r.exec(l)[1];
 
+            importfile = path.join(path.dirname(file), importfile);
+
             loadSol(importfile, imported, function(err, importSrc) {
                 if (err) return cb(err);
                 src = src + importSrc;
@@ -74,7 +79,7 @@ EthClient.prototype.loadSol = function loadSol(filename, imported, cb) {
             });
         }, function(err)  {
             if (err) return cb(err);
-            src = src + "\n//File: " + filename + "\n";
+            src = src + "\n//File: " + file + "\n";
             src = src + srcCode;
             cb(null,src);
         });
