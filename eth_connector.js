@@ -8,9 +8,9 @@ var _ = require('lodash');
 var solc = require('solc');
 var Web3 = require('web3');
 var TestRPC = require("ethereumjs-testrpc");
-
 var ethClient = new EthClient();
-
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 module.exports = ethClient;
 
@@ -18,6 +18,7 @@ function EthClient() {
     this.web3= new Web3();
 }
 
+util.inherits(EthClient, EventEmitter);
 
 EthClient.prototype.init = function init(provider, opts, cb) {
     if (typeof opts === "function") {
@@ -34,6 +35,7 @@ EthClient.prototype.init = function init(provider, opts, cb) {
     self.web3.eth.getAccounts(function(err, accounts) {
         if (err) return cb(err);
         self.accounts = accounts;
+        self.emit('init');
         cb();
     });
 };
@@ -146,7 +148,7 @@ EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
         from: self.accounts[accountIdx],
         value: value,
         data: code,
-        gas: 4700000
+        gas: 4712000
     });
 
     args.push(function (err, contract) {
