@@ -148,7 +148,8 @@ EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
         from: self.accounts[accountIdx],
         value: value,
         data: code,
-        gas: 4712000
+//        gas: 4712000
+        gas: 5500000
     });
 
     args.push(function (err, contract) {
