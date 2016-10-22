@@ -32,6 +32,8 @@ EthClient.prototype.init = function init(provider, opts, cb) {
         self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
+    self.gasLimit = opts.gasLimit || 4712000;
+
     self.web3.eth.getAccounts(function(err, accounts) {
         if (err) return cb(err);
         self.accounts = accounts;
@@ -149,7 +151,8 @@ EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
         value: value,
         data: code,
 //        gas: 4712000
-        gas: 5500000
+//        gas: 5500000
+        gas: self.gasLimit
     });
 
     args.push(function (err, contract) {
