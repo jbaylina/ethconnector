@@ -32,7 +32,8 @@ EthClient.prototype.init = function init(provider, opts, cb) {
         self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
-    self.gasLimit = opts.gasLimit || 4712000;
+    self.gasLimit = opts.gasLimit || 2000000;
+    self.gasPrice = opts.gasPrice || self.web3.toWei(0.00000006);
 
     self.web3.eth.getAccounts(function(err, accounts) {
         if (err) return cb(err);
@@ -41,7 +42,6 @@ EthClient.prototype.init = function init(provider, opts, cb) {
         cb();
     });
 };
-
 
 
 EthClient.prototype.loadSol = function loadSol(file, imported, cb) {
@@ -152,7 +152,8 @@ EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
         data: code,
 //        gas: 4712000
 //        gas: 5500000
-        gas: self.gasLimit
+        gas: self.gasLimit,
+        gasPrice: self.gasPrice
     });
 
     args.push(function (err, contract) {
