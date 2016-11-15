@@ -1,6 +1,6 @@
 {
   "name": "ethconnector",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Helper library to test solidity smart contracts.",
   "main": "eth_connector.js",
   "scripts": {
@@ -29,6 +29,6 @@
     "ethereumjs-testrpc": "^2.2.7",
     "lodash": "^4.15.0",
     "solc": "^0.4.4",
-    "web3": "https://github.com/jbaylina/web3.js/tree/fix-stopwatch-async"
+    "web3": "https://github.com/jbaylina/web3.js.git#fix-stopwatch-async"
   }
 }
