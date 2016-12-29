@@ -141,13 +141,17 @@ EthClient.prototype.compile = function compile(src, cb) {
 
 // Parameters:
 // interface, code, accountIdx, value, constructor arguments . . ., cb
-EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
+EthClient.prototype.deploy = function deploy(abi, code, account, value) {
     var self = this;
     var args = Array.prototype.slice.call(arguments, 4, arguments.length-1);
     var cb = arguments[arguments.length-1];
 
+    if (typeof abi == "string") abi = JSON.parse(abi);
+
+    if (typeof account == "number") account = self.accounts[account];
+
     args.push({
-        from: self.accounts[accountIdx],
+        from: account,
         value: value,
         data: code,
 //        gas: 4712000
@@ -163,6 +167,6 @@ EthClient.prototype.deploy = function deploy(abi, code, accountIdx, value) {
         }
     });
 
-    var contract = self.web3.eth.contract(JSON.parse(abi));
+    var contract = self.web3.eth.contract(abi);
     contract.new.apply(contract, args);
 };
