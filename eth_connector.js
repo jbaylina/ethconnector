@@ -32,7 +32,7 @@ EthClient.prototype.init = function init(provider, opts, cb) {
         self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
-    self.gasLimit = opts.gasLimit || 2000000;
+    self.gasLimit = opts.gasLimit || 4000000;
     self.gasPrice = opts.gasPrice || self.web3.toWei(0.00000006);
 
     self.web3.eth.getAccounts(function(err, accounts) {
