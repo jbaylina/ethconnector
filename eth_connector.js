@@ -11,6 +11,7 @@ var TestRPC = require("ethereumjs-testrpc");
 var ethClient = new EthClient();
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
+var asyncfunc = require('runethtx').asyncfunc;
 
 module.exports = ethClient;
 
@@ -20,27 +21,29 @@ function EthClient() {
 
 util.inherits(EthClient, EventEmitter);
 
-EthClient.prototype.init = function init(provider, opts, cb) {
-    if (typeof opts === "function") {
-        cb =opts;
-        opts = {};
-    }
-    var self = this;
-    if (provider.toUpperCase() === "TESTRPC") {
-        self.web3.setProvider(TestRPC.provider(opts));
-    } else {
-        self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    }
+EthClient.prototype.init = function init(provider, opts, _cb) {
+    return asyncfunc((cb) => {
+        if (typeof opts === "function") {
+            cb =opts;
+            opts = {};
+        }
+        var self = this;
+        if (provider.toUpperCase() === "TESTRPC") {
+            self.web3.setProvider(TestRPC.provider(opts));
+        } else {
+            self.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
 
-    self.gasLimit = opts.gasLimit || 4000000;
-    self.gasPrice = opts.gasPrice || self.web3.toWei(0.00000006);
+        self.gasLimit = opts.gasLimit || 4000000;
+        self.gasPrice = opts.gasPrice || self.web3.toWei(0.00000006);
 
-    self.web3.eth.getAccounts(function(err, accounts) {
-        if (err) return cb(err);
-        self.accounts = accounts;
-        self.emit('init');
-        cb();
-    });
+        self.web3.eth.getAccounts(function(err, accounts) {
+            if (err) return cb(err);
+            self.accounts = accounts;
+            self.emit('init');
+            cb();
+        });
+    }, _cb);
 };
 
 
@@ -112,7 +115,7 @@ function fixErrorLines(src, errors) {
     _.each(errors, function(error, idx) {
         var rErrPos = new RegExp('\:([0-9]+)\:([0-9]+)\:');
         var errPos = rErrPos.exec(error);
-        var lineNum = parseInt(errPos[1])-1;
+        var lineNum = errPos ? parseInt(errPos[1])-1 : -1;
         var found = false;
         var offset = 1;
         var rFile = new RegExp("//File: (.*)","");
@@ -218,3 +221,42 @@ EthClient.prototype.compile = function(sourceFile, destFile, opts, cb) {
         }
     ], cb);
 };
+
+
+EthClient.prototype.delay = function(secs, _cb) {
+    var self = this;
+    return asyncfunc((cb) => {
+        send("evm_mine", function(err, result) {
+            if (err) return cb(err);
+
+            send("evm_increaseTime", [secs], function(err, result) {
+                if (err) return cb(err);
+
+          // Mine a block so new time is recorded.
+                send("evm_mine", function(err, result) {
+                    if (err) return cb(err);
+                    cb();
+                });
+            });
+        });
+
+            // CALL a low level rpc
+        function send(method, params, callback) {
+            if (typeof params === "function") {
+                callback = params;
+                params = [];
+            }
+
+            self.web3.currentProvider.sendAsync({
+                jsonrpc: "2.0",
+                method,
+                params: params || [],
+                id: new Date().getTime(),
+            }, callback);
+        }
+
+        function mineTx() {
+
+        }
+    }, _cb);
+}

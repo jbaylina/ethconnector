@@ -28,6 +28,7 @@
     "async": "^2.0.1",
     "ethereumjs-testrpc": "3.0.1",
     "lodash": "^4.15.0",
+    "runethtx": "0.0.7",
     "solc": "^0.4.6",
     "web3": "^0.18.0"
   }
